@@ -22,16 +22,27 @@ yargs.command({
               }
     },
     handler: function(argv){
-        console.log('Titile =',argv.title)
-        console.log('Content =',argv.body)
+        console.log('title =',argv.title)
+        console.log('body =',argv.body)
+        notes.addNote(argv.title,argv.body)
+        // here we are getting arguments values from yargs and we need to utilize them and store in data store
+        
     }
 })
 
 yargs.command({
     command: 'remove',
     describe: 'Remove a note',
-    handler: function(){
-        console.log('Removing the note')
+    builder : {
+        title : {
+                describe: 'Note title',
+                demandOption: true,
+                type: 'string'
+        }
+    },
+    handler: function(argv){
+        console.log(argv.title)
+        notes.removeNote(argv.title)
     }
 })
 
@@ -51,4 +62,4 @@ yargs.command({
     }
 })
 yargs.parse()
-// console.log(yargs.argv)
+console.log(yargs.argv)
