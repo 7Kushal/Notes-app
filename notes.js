@@ -5,6 +5,7 @@
 
 // as we are going to work with file system to store the data
 const fs = require('fs')
+const chalk = require('chalk')
 
 //get notes function to get a note
 const getnotes = function(){
@@ -27,7 +28,8 @@ const addNode = function(title,body){
         title : title,
         body : body
     })
-    console.log("Note is added")
+    
+    console.log(chalk.green.inverse("Note is added"))
     }
     else{
         console.log("We cannot add this note")
@@ -50,21 +52,19 @@ const saveNotes = function(note){
 const removeNote = function(title){
     // console.log(title)
     const notes = loadnotes() 
-    const isPresent = notes.filter( function (note){
-        return note.title === title
+    const notesToKeep = notes.filter( function (note){
+        return note.title != title
     })
 
-    console.log(isPresent)
+    // console.log(isPresent)
 
-    if(isPresent.length==1){
+    if(notesToKeep.length<notes.length){
 
         // We need to delete it from data Store now 
 
-        
-        removeByTitle(notes,title)
-        console.log("Note is Removed")
-        console.log(notes)
-        saveNotes(notes)
+        console.log(chalk.red.inverse("Note is Removed"))
+        console.log(notesToKeep)
+        saveNotes(notesToKeep)
         }
         else{
             console.log("Not Present")
@@ -84,15 +84,15 @@ const loadnotes = function(){
     
 }
 
-const removeByTitle = (arr, title) => {
-    const requiredIndex = arr.findIndex(el => {
-    return el.title === String(title);
-    });
-     if(requiredIndex === -1){
-     return false;
-     };
-     return !!arr.splice(requiredIndex, 1);
-    };
+// const removeByTitle = (arr, title) => {
+//     const requiredIndex = arr.findIndex(el => {
+//     return el.title === String(title);
+//     });
+//      if(requiredIndex === -1){
+//      return false;
+//      };
+//      return !!arr.splice(requiredIndex, 1);
+//     };
 
 module.exports = {
     getnotes : getnotes,
