@@ -18,9 +18,9 @@ const addNode = (title,body)=>{
     // Now we need to add the note in our store 
     console.log(notes)
     
-    const isPresent = notes.filter((note) => note.title === title)
+    const isPresent = notes.find((note) => note.title === title)
 
-    if(isPresent.length==0){
+    if(!isPresent){
     notes.push({
         title : title,
         body : body
@@ -43,6 +43,17 @@ const saveNotes =(note)=>{
     fs.writeFileSync('notes.json',entryJSON)
 
 }
+// Read a note when a title is provided 
+
+const readNote = (title)=>{
+    const isPresent = notes.filter((note)=>note.title==title)
+    if(isPresent.length>0){
+        console.log("✔️")
+        console.log(isPresent[0].body)
+    }
+    else
+    console.log("Note not present ❌")
+} 
 
 // Remove an Note
 
@@ -87,5 +98,6 @@ module.exports = {
     getnotes : getnotes,
     addNote : addNode,
     removeNote:removeNote,
-    listNotes:listNotes
+    listNotes:listNotes,
+    readNote:readNote
 }
