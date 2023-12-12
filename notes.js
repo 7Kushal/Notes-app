@@ -8,31 +8,28 @@ const fs = require('fs')
 const chalk = require('chalk')
 
 //get notes function to get a note
-const getnotes = function(){
+const getnotes = ()=>{
     return "Your notes"
 }
 
-// To add an fresh note
-
-const addNode = function(title,body){
-    const notes = loadnotes()  // notes as JS objects 
+// To add an fresh note 
+const addNode = (title,body)=>{
+    // notes as JS objects 
     // Now we need to add the note in our store 
     console.log(notes)
     
-    const isPresent = notes.filter( function (note){
-        return note.title === title
-    })
+    const isPresent = notes.filter((note) => note.title === title)
 
-    if(isPresent==false){
+    if(isPresent.length==0){
     notes.push({
         title : title,
         body : body
     })
     
-    console.log(chalk.green.inverse("Note is added"))
+    console.log(chalk.green.inverse("Note is added😊"))
     }
     else{
-        console.log("We cannot add this note")
+        console.log(chalk.yellow("Same title note cannot be add 😒"))
     }
 
     saveNotes(notes)
@@ -40,7 +37,7 @@ const addNode = function(title,body){
 
 // to save the notes 
 
-const saveNotes = function(note){
+const saveNotes =(note)=>{
 
     const entryJSON = JSON.stringify(note)
     fs.writeFileSync('notes.json',entryJSON)
@@ -49,14 +46,9 @@ const saveNotes = function(note){
 
 // Remove an Note
 
-const removeNote = function(title){
+const removeNote = (title)=>{
     // console.log(title)
-    const notes = loadnotes() 
-    const notesToKeep = notes.filter( function (note){
-        return note.title != title
-    })
-
-    // console.log(isPresent)
+    const notesToKeep = notes.filter((note) =>note.title != title)
 
     if(notesToKeep.length<notes.length){
 
@@ -71,8 +63,16 @@ const removeNote = function(title){
         }
 }
 
+const listNotes = ()=>{
+    console.log(chalk.yellow.inverse("Your Notes ❤️"))
+    notes.forEach(note => {
+        console.log(chalk.green.inverse(note.title) + "-->" + 
+        chalk.red.inverse(note.body))
+    });   
+}
+
 // this will get all of the data from data file at once 
-const loadnotes = function(){
+const loadnotes = ()=>{
 
     try {
         const dataBuffer = fs.readFileSync('notes.json') // data comes in form of an buffer 
@@ -81,21 +81,11 @@ const loadnotes = function(){
     } catch (error) {
         return []
     }
-    
 }
-
-// const removeByTitle = (arr, title) => {
-//     const requiredIndex = arr.findIndex(el => {
-//     return el.title === String(title);
-//     });
-//      if(requiredIndex === -1){
-//      return false;
-//      };
-//      return !!arr.splice(requiredIndex, 1);
-//     };
-
+const notes = loadnotes() 
 module.exports = {
     getnotes : getnotes,
     addNote : addNode,
-    removeNote:removeNote
+    removeNote:removeNote,
+    listNotes:listNotes
 }
